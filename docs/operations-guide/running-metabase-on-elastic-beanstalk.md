@@ -150,7 +150,11 @@ To make the database live in a private subnet, we need to create a Subnet group.
 
 Then click on the Create button and head to the Databases sectio to create the cluster
 
-### 2.2 Create the RDS database
+### 2.2 Encrypt traffic to the database
+
+By default, RDS does not enable encryption in transit, so in order to make the traffic encrypted to the database, go to "Parameter groups", create a new parameter group selecting the the database and version that you're going to use (e.g. `postgres14`), use a group name to identify the new parameter group (e.g. `postgres14-encrypted`), then search for the `rds.force_ssl` parameter in the new parameter group and set it to 1.
+
+### 2.3 Create the RDS database
 
 On the Database section click on Create database and use the following values:
 
