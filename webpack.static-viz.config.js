@@ -1,3 +1,5 @@
+const webpack = require("webpack");
+
 const SRC_PATH = __dirname + "/frontend/src/metabase";
 const BUILD_PATH = __dirname + "/resources/frontend_client";
 
@@ -33,7 +35,16 @@ module.exports = {
       {
         test: /\.(tsx?|jsx?)$/,
         exclude: /node_modules/,
-        use: [{ loader: "babel-loader", options: BABEL_CONFIG }],
+        use: [
+          {
+            loader: "esbuild-loader",
+            options: {
+              loader: "tsx",
+              target: "es6",
+              jsxFactory: "_jsx",
+            },
+          },
+        ],
       },
     ],
   },
@@ -43,4 +54,10 @@ module.exports = {
       metabase: SRC_PATH,
     },
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      React: "react",
+      _jsx: ["@emotion/core", "jsx"],
+    }),
+  ],
 };
