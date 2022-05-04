@@ -17,7 +17,7 @@ function QuestionDetailsSidebar({
   isBookmarked,
   toggleBookmark,
 }) {
-  const [view, setView] = useState(view);
+  const [view, setView] = useState();
 
   switch (view) {
     case SIDEBAR_VIEWS.DETAILS:
