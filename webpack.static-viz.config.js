@@ -41,7 +41,7 @@ module.exports = {
             options: {
               loader: "tsx",
               target: "es6",
-              jsxFactory: "_jsx",
+              jsxFactory: "jsx",
             },
           },
         ],
@@ -57,7 +57,7 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({
       React: "react",
-      _jsx: ["@emotion/core", "jsx"],
+      jsx: ["@emotion/core", "jsx"],
     }),
   ],
 };
