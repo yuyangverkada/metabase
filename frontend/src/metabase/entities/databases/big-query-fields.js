@@ -156,6 +156,12 @@ export default function getFieldsForBigQuery(details) {
         type: MetadataSyncScheduleWidget,
         description: t`This is a lightweight process that checks for updates to this database’s schema. In most cases, you should be fine leaving this set to sync hourly.`,
         "visible-if": { "let-user-control-scheduling": true },
+        initial: {
+          schedule_day: "mon",
+          schedule_frame: null,
+          schedule_hour: 0,
+          schedule_type: "daily",
+        },
       },
       {
         name: "schedules.cache_field_values",

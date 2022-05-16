@@ -81,6 +81,12 @@ const DATABASE_DETAIL_OVERRIDES = {
     name: "schedules.metadata_sync",
     type: MetadataSyncScheduleWidget,
     normalize: value => value,
+    initial: {
+      schedule_day: "mon",
+      schedule_frame: null,
+      schedule_hour: 0,
+      schedule_type: "daily",
+    },
   }),
   "schedules.cache_field_values": () => ({
     name: "schedules.cache_field_values",
