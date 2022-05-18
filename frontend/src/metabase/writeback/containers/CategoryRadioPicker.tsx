@@ -49,7 +49,7 @@ function CategoryRadioPicker({
 
   useOnMount(() => {
     if (fieldInstance.id) {
-      fetchFieldValues({ id: fieldInstance.id });
+      fetchFieldValues({ id: fieldInstance.getId() });
     }
   });
 

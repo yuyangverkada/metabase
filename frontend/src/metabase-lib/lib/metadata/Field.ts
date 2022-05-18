@@ -31,6 +31,7 @@ import {
   getFilterOperators,
 } from "metabase/lib/schema_metadata";
 import { FieldFingerprint } from "metabase-types/api/field";
+import { Field as FieldRef } from "metabase-types/types/Query";
 import { FieldDimension } from "../Dimension";
 import Table from "./Table";
 import Base from "./Base";
@@ -43,12 +44,13 @@ import Base from "./Base";
  */
 
 class FieldInner extends Base {
-  id?: number;
+  id: number | FieldRef;
   name: string;
   description: string | null;
   semantic_type: string | null;
   fingerprint?: FieldFingerprint;
   table?: Table;
+  target?: Field;
 
   parent() {
     return this.metadata ? this.metadata.field(this.parent_id) : null;
@@ -215,6 +217,14 @@ class FieldInner extends Base {
 
   icon() {
     return getIconForField(this);
+  }
+
+  getId(): number {
+    if (Array.isArray(this.id)) {
+      return this.id[1];
+    } else {
+      return this.id;
+    }
   }
 
   reference() {
