@@ -214,6 +214,7 @@
     ;; make sure this Card doesn't have circular source query references
     (check-for-circular-source-query-references card)
     (check-field-filter-fields-are-from-correct-database card)
+    (params/assert-valid-parameters card)
     (collection/check-collection-namespace Card (:collection_id card))))
 
 (defn- post-insert [card]
@@ -231,7 +232,8 @@
   For the OSS edition, there is no implementation for this function -- it is a no-op. For Metabase Enterprise Edition,
   the implementation of this function is
   [[metabase-enterprise.sandbox.models.group-table-access-policy/update-card-check-gtaps]] and is installed by that
-  namespace."} pre-update-check-sandbox-constraints
+  namespace."}
+  pre-update-check-sandbox-constraints
   (atom identity))
 
 (defn- pre-update [{archived? :archived, id :id, :as changes}]
@@ -261,6 +263,7 @@
     (check-field-filter-fields-are-from-correct-database changes)
     ;; Make sure the Collection is in the default Collection namespace (e.g. as opposed to the Snippets Collection namespace)
     (collection/check-collection-namespace Card (:collection_id changes))
+    (params/assert-valid-parameters changes)
     ;; additional checks (Enterprise Edition only)
     (@pre-update-check-sandbox-constraints changes)))
 
@@ -289,7 +292,8 @@
                                        :embedding_params       :json
                                        :query_type             :keyword
                                        :result_metadata        ::result-metadata
-                                       :visualization_settings :visualization-settings})
+                                       :visualization_settings :visualization-settings
+                                       :parameters             :parameters-list})
           :properties     (constantly {:timestamped? true})
           ;; Make sure we normalize the query before calling `pre-update` or `pre-insert` because some of the
           ;; functions those fns call assume normalized queries
