@@ -15,6 +15,7 @@ import FormError from "metabase/components/form/FormError";
 import Sidebar from "metabase/admin/databases/components/DatabaseEditApp/Sidebar/Sidebar";
 import DriverWarning from "metabase/containers/DriverWarning";
 import { getUserIsAdmin } from "metabase/selectors/user";
+import { createErrorMessageMarkdown } from "metabase/lib/form";
 
 import Databases from "metabase/entities/databases";
 import { getSetting } from "metabase/selectors/settings";
@@ -151,7 +152,6 @@ class DatabaseEditApp extends Component {
                     {({
                       Form,
                       FormField,
-                      FormMessage,
                       FormSubmit,
                       formFields,
                       values,
@@ -176,7 +176,10 @@ class DatabaseEditApp extends Component {
                               <FormError
                                 className="mt3 mb4"
                                 anchorMarginTop={24}
-                                error={error}
+                                error={createErrorMessageMarkdown(
+                                  error,
+                                  formFields,
+                                )}
                               />
                               {_.reject(formFields, { name: "engine" }).map(
                                 ({ name }) => (

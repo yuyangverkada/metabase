@@ -1,7 +1,6 @@
 import React from "react";
 import { ComponentStory } from "@storybook/react";
 import FormError from "./FormError";
-import { S } from "cljs/goog.dom.tagname";
 
 export default {
   title: "Form/FormError",

@@ -5,7 +5,7 @@ import Markdown from "metabase/core/components/Markdown";
 import { ErrorCard, ScrollAnchor, WarningIcon } from "./FormError.styled";
 
 interface FormErrorProps {
-  error: string;
+  error?: string;
   className?: string;
   anchorMarginTop?: number;
 }
