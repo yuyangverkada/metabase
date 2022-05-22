@@ -68,12 +68,7 @@
                             (do
                               (unschedule-tasks-for-db! (database/map->DatabaseInstance {:id database-id}))
                               (log/warn (trs "Cannot sync Database {0}: Database does not exist." database-id))))]
-      (sync-metadata/sync-db-metadata! database)
-      ;; only run analysis if this is a "full sync" database
-      (when (:is_full_sync database)
-        (let [results (analyze/analyze-db! database)]
-          (when (and (:refingerprint database) (should-refingerprint-fields? results))
-            (analyze/refingerprint-db! database)))))))
+      (sync-metadata/sync-db-metadata! database))))
 
 (jobs/defjob ^{org.quartz.DisallowConcurrentExecution true
                :doc "Sync and analyze the database"}
@@ -90,13 +85,11 @@
                               (unschedule-tasks-for-db! (database/map->DatabaseInstance {:id database-id}))
                               (log/warn "Cannot update Field values for Database {0}: Database does not exist." database-id)))]
       (if (:is_full_sync database)
-        (field-values/update-field-values! database)
         (log/info (trs "Skipping update, automatic Field value updates are disabled for Database {0}." database-id))))))
 
 (jobs/defjob ^{org.quartz.DisallowConcurrentExecution true
                :doc "Update field values"}
-  UpdateFieldValues [job-context]
-  (update-field-values! job-context))
+  UpdateFieldValues [job-context])
 
 ;;; +----------------------------------------------------------------------------------------------------------------+
 ;;; |                                         TASK INFO AND GETTER FUNCTIONS                                         |
@@ -220,10 +213,7 @@
 
         existing-sync-trigger (some (fn [trigger] (when (= (:key trigger) (.. sync-trigger getKey getName))
                                                     trigger))
-                                    (:triggers sync-job))
-        existing-fv-trigger   (some (fn [trigger] (when (= (:key trigger) (.. fv-trigger getKey getName))
-                                                    trigger))
-                                    (:triggers fv-job))]
+                                    (:triggers sync-job))]
 
     (doseq [{:keys [existing-trigger existing-schedule ti trigger description]}
             [{:existing-trigger  existing-sync-trigger
@@ -231,11 +221,7 @@
               :ti                sync-analyze-task-info
               :trigger           sync-trigger
               :description       "sync/analyze"}
-             {:existing-trigger  existing-fv-trigger
-              :existing-schedule (:cache_field_values_schedule database)
-              :ti                field-values-task-info
-              :trigger           fv-trigger
-              :description       "field-values"}]]
+              ]]
       (when (or (not existing-trigger)
                 (not= (:schedule existing-trigger) existing-schedule))
         (delete-task! database ti)

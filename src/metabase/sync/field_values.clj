@@ -48,8 +48,7 @@
           (db/select Field :table_id (u/the-id table), :active true, :visibility_type "normal")))
 
 (s/defn ^:private update-field-values-for-database!
-  [database :- i/DatabaseInstance]
-  (apply merge-with + (map update-field-values-for-table! (sync-util/db->sync-tables database))))
+  [database :- i/DatabaseInstance])
 
 (defn- update-field-values-summary [{:keys [created updated deleted errors]}]
   (trs "Updated {0} field value sets, created {1}, deleted {2} with {3} errors"
